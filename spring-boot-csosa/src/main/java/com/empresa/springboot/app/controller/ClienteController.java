@@ -35,7 +35,6 @@ public class ClienteController {
 			Cliente crearCliente = clienteRepository.save(cliente);
 			URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 					.buildAndExpand(crearCliente.getId()).toUri();
-			logger.info("cliente creado id: " + crearCliente.getId());
 			return ResponseEntity.created(location).build();
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
@@ -43,24 +42,30 @@ public class ClienteController {
 					.body("Error Message: Error al crear el Cliente");
 		}
 	}
-	
+
 	@GetMapping("/kpideclientes")
-	public ClienteKpi kpideclientes(){
-		logger.info("Lista de Kpi De Clientes");
-		
+	public ClienteKpi kpideclientes() {
+		logger.info("kpideclientes :");
+
 		ClienteKpi kpiClientes = new ClienteKpi();
 		List<Cliente> listaClientes = (List<Cliente>) clienteRepository.findAll();
 
 		kpiClientes.setPromedioEdad(Util.calcularPromedio(Util.obtenerListaEdad(listaClientes)));
 		kpiClientes.setDesviacionEstandar(Util.calcularDesviacionEstandar(Util.obtenerListaEdad(listaClientes)));
-				
+
 		return kpiClientes;
 	}
-	
 
 	@GetMapping(value = "/listClientes")
-	public List<Cliente> listarClientes() {
-		return (List<Cliente>) clienteRepository.findAll();
+	public List<Cliente> listClientes() {
+		logger.info("listClientes :");
+		List<Cliente> clientes = (List<Cliente>) clienteRepository.findAll();
+		for (Cliente cliente : clientes) {
+			cliente.setFechaProbableDeMuerte(
+					Util.calcularFechaDeMuerte(cliente.getEdad(), cliente.getFechaNacimiento()));
+		}
+
+		return clientes;
 	}
 
 }
