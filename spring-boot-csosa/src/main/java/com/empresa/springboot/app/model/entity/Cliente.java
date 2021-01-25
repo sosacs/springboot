@@ -15,6 +15,8 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -25,6 +27,7 @@ public class Cliente implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@ApiModelProperty(required = false, hidden = true)
 	private Long id;
 
 	@NotNull
@@ -41,14 +44,15 @@ public class Cliente implements Serializable {
 
 	@Past
 	@NotNull
-	@ApiModelProperty(notes = "Fecha de Nacimiento del cliente (<=) a hoy:")
+	@JsonFormat(pattern="yyyy-MM-dd")
+	@ApiModelProperty(notes = "Fecha de Nacimiento del cliente (<=) a hoy:", example = "YYYY-MM-DD", dataType = "java.sql.Date")
 	@Temporal(TemporalType.DATE)
 	@Column(name = "fecha_nacimiento")
 	private Date fechaNacimiento;
 
 	@Transient
 	@Temporal(TemporalType.DATE)
-	@ApiModelProperty(notes = "Fecha probable de muerte:")
+	@ApiModelProperty(required = false, hidden = true)
 	private Date fechaProbableDeMuerte;
 
 	public Long getId() {

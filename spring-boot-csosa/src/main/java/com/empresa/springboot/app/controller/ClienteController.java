@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.empresa.springboot.app.model.entity.Cliente;
+import com.empresa.springboot.app.model.entity.ClienteKpi;
 import com.empresa.springboot.app.repository.ClienteRepository;
+import com.empresa.springboot.app.util.Util;
 
 @RestController
 public class ClienteController {
@@ -38,9 +40,23 @@ public class ClienteController {
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error Message: Error en crear el Cliente");
+					.body("Error Message: Error al crear el Cliente");
 		}
 	}
+	
+	@GetMapping("/kpideclientes")
+	public ClienteKpi kpideclientes(){
+		logger.info("Lista de Kpi De Clientes");
+		
+		ClienteKpi kpiClientes = new ClienteKpi();
+		List<Cliente> listaClientes = (List<Cliente>) clienteRepository.findAll();
+
+		kpiClientes.setPromedioEdad(Util.calcularPromedio(Util.obtenerListaEdad(listaClientes)));
+		kpiClientes.setDesviacionEstandar(Util.calcularDesviacionEstandar(Util.obtenerListaEdad(listaClientes)));
+				
+		return kpiClientes;
+	}
+	
 
 	@GetMapping(value = "/listClientes")
 	public List<Cliente> listarClientes() {
