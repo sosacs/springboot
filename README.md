@@ -1,14 +1,15 @@
 # Challenge Tecnico
-Sosa Challenge técnico - InDigital
+Sosa Challenge Tecnico - InDigital
 
 ## Acerca del proyecto
 Spring boot, Java 1.8, H2, GIT, AWS.
 
-#Enlaces:
+- Enlaces:
 1. Proyecto en Github: https://github.com/sosacs/springboot
 2. Documentación del api: http://18.230.108.151:8080/swagger-ui.html
 
-#Endpoint:
+
+- Endpoint:
 1. POST: /creacliente
 {
   "apellido": "Perez",
